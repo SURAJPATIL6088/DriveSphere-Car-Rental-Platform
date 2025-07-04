@@ -1,0 +1,40 @@
+@model IEnumerable<CarRentalHub.API.Models.Booking>
+@{
+    ViewData["Title"] = "User Bookings";
+    var user = ViewBag.User as CarRentalHub.API.Models.ApplicationUser;
+}
+<h2>Bookings for @user?.FullName (@user?.Email)</h2>
+<a asp-action="ListUsers" class="btn btn-secondary mb-2">Back to Users</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Car Brand</th>
+            <th>Model</th>
+            <th>Color</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Distance (km)</th>
+            <th>Total Price</th>
+            <th>Booking Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var booking in Model)
+        {
+            <tr>
+                <td>@booking.Car?.Brand</td>
+                <td>@booking.Car?.Model</td>
+                <td>@booking.Car?.Color</td>
+                <td>@booking.FromLocation</td>
+                <td>@booking.ToLocation</td>
+                <td>@booking.Distance.ToString("F2")</td>
+                <td>₹@booking.TotalPrice</td>
+                <td>@booking.BookingDate.ToShortDateString()</td>
+                <td>@booking.EndDate.ToShortDateString()</td>
+                <td>@(booking.Canceled ? "Canceled" : "Active")</td>
+            </tr>
+        }
+    </tbody>
+</table> 

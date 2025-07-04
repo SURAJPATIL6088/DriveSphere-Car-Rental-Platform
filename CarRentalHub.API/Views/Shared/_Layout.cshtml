@@ -1,0 +1,153 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CarRentalHub</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body {
+            background: linear-gradient(120deg, #f8fafc 0%, #e0eafc 100%);
+            font-family: Arial, sans-serif;
+        }
+
+        .content-wrapper {
+            flex: 1;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.7rem;
+            letter-spacing: 1px;
+        }
+
+        .main-gradient {
+            background: linear-gradient(90deg, #4f8cff 0%, #6dd5ed 100%);
+            color: #fff;
+            padding: 2rem 0 1.5rem 0;
+            border-radius: 0 0 2rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 24px rgba(79,140,255,0.08);
+        }
+
+        .footer {
+            background: #222;
+            color: #fff;
+            padding: 1.2rem 0;
+        }
+
+        .nav-link.active, .nav-link:focus, .nav-link:hover {
+            color: #4f8cff !important;
+            font-weight: 500;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 12px rgba(79,140,255,0.07);
+        }
+    </style>
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">CarRentalHub</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="About">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="ContactUs">Contact Us</a>
+                        </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Admin" asp-action="Dashboard">Admin Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Admin" asp-action="Dashboard">Manage Cars</a>
+                                </li>
+                            }
+
+                            @if (User.IsInRole("User"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="User" asp-action="Dashboard">User Dashboard</a>
+                                </li>                            
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="User" asp-action="MyBookings">My Bookings</a>
+                                </li>                                
+                            }
+
+                        }
+                    </ul>
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="nav-link btn btn-link text-dark" style="text-decoration: none;">Logout</button>
+                                </form>
+                            </li>
+                            <li class="nav-item">
+                                <span class="navbar-text text-primary fw-bold">
+                                    Hello, @UserManager.GetUserAsync(User).Result?.FullName!
+                                </span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="content-wrapper">
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+    <footer class="footer text-center">
+        <div class="container">
+            &copy; 2025 - CarRentalHub &mdash;
+            <a asp-controller="Home" asp-action="Privacy" class="text-light">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

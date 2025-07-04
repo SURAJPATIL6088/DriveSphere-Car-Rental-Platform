@@ -1,0 +1,28 @@
+﻿@model List<CarRentalHub.API.Models.Car>
+
+@{
+    ViewData["Title"] = "Available Cars";
+}
+
+<h2 class="text-center my-4">Available Cars for Booking</h2>
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var car in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="@Url.Content(car.ImagePath)" class="card-img-top" alt="@car.Model" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">@car.Brand @car.Model</h5>
+                        <p class="card-text">
+                            <strong>Color:</strong> @car.Color <br />
+                            <strong>Price Per Day:</strong> ₹@car.PricePerDay<br />
+                        </p>
+                        <a asp-controller="User" asp-action="Book" asp-route-id="@car.Id" class="btn btn-primary w-100">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

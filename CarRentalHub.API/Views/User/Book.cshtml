@@ -1,0 +1,92 @@
+﻿@model CarRentalHub.API.ViewModels.BookingViewModel
+
+@{
+    ViewData["Title"] = "Book Car";
+}
+
+<h2>Book Car</h2>
+
+<div id="pricePreview" class="alert alert-info" style="display:none;"></div>
+
+<form asp-action="Book" method="post">
+    @Html.AntiForgeryToken()
+
+        <div>
+            <p class="card-text">
+            <strong>Brand:</strong> @Model.Brand <br /> <br />
+            <strong>Model:</strong> @Model.Model <br /> <br />
+            <strong>Color:</strong> @Model.Color <br /> <br />
+            <strong>Price Per Day:</strong> @Model.PricePerDay <br /> <br />
+            </p>
+        </div>
+
+    <input type="hidden" asp-for="CarId"/>
+
+    <div class="mb-3">
+        <label>From Location:</label>
+        <input asp-for="FromLocation" class="form-control" />
+        <span asp-validation-for="FromLocation" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>To Location:</label>
+        <input asp-for="ToLocation" class="form-control" />
+        <span asp-validation-for="ToLocation" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Start Date:</label>
+        <input asp-for="BookingDate" class="form-control" type="date" />
+        <span asp-validation-for="BookingDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>End Date:</label>
+        <input asp-for="EndDate" class="form-control" type="date" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success" id="confirmBtn" disabled>Confirm Booking</button>
+</form>
+
+@section Scripts {
+<script>
+    function updatePricePreview() {
+        var from = $("#FromLocation").val();
+        var to = $("#ToLocation").val();
+        var carId = $("#CarId").val();
+        var bookingDate = $("#BookingDate").val();
+        var endDate = $("#EndDate").val();
+        if (!from || !to || !bookingDate || !endDate) {
+            $("#pricePreview").hide();
+            $("#confirmBtn").prop("disabled", true);
+            return;
+        }
+        $.post("/User/CalculateBookingPrice", {
+            fromLocation: from,
+            toLocation: to,
+            carId: carId,
+            bookingDate: bookingDate,
+            endDate: endDate
+        }, function(data) {
+            if (data.success) {
+                $("#pricePreview").html(
+                    `<b>Price Per Day:</b> ₹${data.pricePerDay} <br>` +
+                    `<b>Distance:</b> ${data.distance.toFixed(2)} km <br>` +
+                    `<b>Calculated Price (distance x 2):</b> ₹${data.calculatedPrice} <br>` +
+                    `<b>Days:</b> ${data.days} <br>` +
+                    `<b><span style='color:green'>Total Price: ₹${data.total}</span></b>`
+                ).show();
+                $("#confirmBtn").prop("disabled", false);
+            } else {
+                $("#pricePreview").html("<span style='color:red'>" + data.message + "</span>").show();
+                $("#confirmBtn").prop("disabled", true);
+            }
+        });
+    }
+    $(function() {
+        $("#FromLocation, #ToLocation, #BookingDate, #EndDate").on("change blur", updatePricePreview);
+        updatePricePreview();
+    });
+</script>
+}

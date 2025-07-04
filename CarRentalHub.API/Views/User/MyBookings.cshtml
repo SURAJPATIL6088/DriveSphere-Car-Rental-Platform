@@ -1,0 +1,65 @@
+﻿@model List<CarRentalHub.API.Models.Booking>
+
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+<h2>My Bookings</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>You have no bookings.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Car Brand</th>
+                <th>Model</th>
+                <th>Color</th>
+                <th>Price Per Day</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Distance (km)</th>
+                <th>Calculated Price</th>
+                <th>Booking Date</th>
+                <th>End Date</th>
+                <th>Total Price (at booking)</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var booking in Model)
+            {
+                <tr>
+                    <td>@booking.Car?.Brand</td>
+                    <td>@booking.Car?.Model</td>
+                    <td>@booking.Car?.Color</td>
+                    <td>@booking.Car?.PricePerDay</td>
+                    <td>@booking.FromLocation</td>
+                    <td>@booking.ToLocation</td>
+                    <td>@booking.Distance.ToString("F2")</td>
+                    <td>₹@booking.CalculatedPrice</td>
+                    <td>@booking.BookingDate.ToShortDateString()</td>
+                    <td>@booking.EndDate.ToShortDateString()</td>
+                    <td><b>₹@booking.TotalPrice</b></td>
+                    <td>
+                        @(booking.Canceled ? "Canceled" : "Active")
+                    </td>
+                    <td>
+                        @if (!booking.Canceled)
+                        {
+                            <form asp-action="CancelBooking" method="post" style="display:inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@booking.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

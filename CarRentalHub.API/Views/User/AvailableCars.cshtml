@@ -1,0 +1,56 @@
+﻿@model List<CarRentalHub.API.Models.Car>
+
+@{
+    ViewData["Title"] = "Available Cars";
+}
+
+<h2>Available Cars for Booking</h2>
+
+<style>
+.car-card {
+    background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    padding: 20px;
+    margin-bottom: 24px;
+    transition: box-shadow 0.2s;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.car-card:hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.16);
+}
+.car-img {
+    width: 100%;
+    max-height: 160px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    background: #fff;
+}
+</style>
+
+<div class="row">
+    @foreach (var car in Model)
+    {
+        <div class="col-md-4 d-flex align-items-stretch">
+            <div class="car-card w-100">
+                @if (!string.IsNullOrEmpty(car.ImagePath))
+                {
+                    <img src="@Url.Content(car.ImagePath)" alt="Car Image" class="car-img" />
+                }
+                <h4>@car.Brand @car.Model</h4>
+                <p><b>Color:</b> @car.Color</p>
+                <p><b>Price Per Day:</b> ₹@car.PricePerDay</p>
+                <p><b>Driver:</b> @car.DriverName</p>
+                <p><b>Phone:</b> @car.DriverPhone</p>
+                <form asp-controller="User" asp-action="Book" method="get">
+                    <input type="hidden" name="id" value="@car.Id" />
+                    <button type="submit" class="btn btn-primary w-100">Book</button>
+                </form>
+            </div>
+        </div>
+    }
+</div>

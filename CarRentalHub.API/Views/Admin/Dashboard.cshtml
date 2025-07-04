@@ -1,0 +1,37 @@
+﻿@model IEnumerable<CarRentalHub.API.Models.Car>
+
+<h2>Cars Dashboard</h2>
+
+<a asp-action="ListUsers" class="btn btn-primary mb-3">View Registered Users</a>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Add New Car</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Color</th>
+            <th>Price Per Day</th>
+            <th>Available</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var car in Model)
+        {
+            <tr>
+                <td>@car.Brand</td>
+                <td>@car.Model</td>
+                <td>@car.Color</td>
+                <td>@car.PricePerDay</td>
+                <td>@car.IsAvailable</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@car.Id" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@car.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

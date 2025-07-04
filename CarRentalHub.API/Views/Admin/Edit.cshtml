@@ -1,0 +1,60 @@
+﻿@model CarRentalHub.API.Models.Car
+
+@{
+    ViewData["Title"] = "Edit Car";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Brand"></label>
+        <input asp-for="Brand" class="form-control" />
+        <span asp-validation-for="Brand" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Model"></label>
+        <input asp-for="Model" class="form-control" />
+        <span asp-validation-for="Model" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Color"></label>
+        <input asp-for="Color" class="form-control" />
+        <span asp-validation-for="Color" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PricePerDay"></label>
+        <input asp-for="PricePerDay" class="form-control" />
+        <span asp-validation-for="PricePerDay" class="text-danger"></span>
+    </div>
+    <div class="form-check">
+        <input asp-for="IsAvailable" class="form-check-input" />
+        <label asp-for="IsAvailable" class="form-check-label"></label>
+    </div>
+    @if (Model.ImagePath != null)
+    {
+        <div class="mb-2">
+            <img src="@Url.Content(Model.ImagePath)" alt="Car Image" style="max-width:200px;max-height:150px;" />
+        </div>
+    }
+    <div class="form-group">
+        <label>Car Image</label>
+        <input type="file" name="ImageFile" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="DriverName" class="control-label"></label>
+        <input asp-for="DriverName" class="form-control" />
+        <span asp-validation-for="DriverName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DriverPhone" class="control-label"></label>
+        <input asp-for="DriverPhone" class="form-control" />
+        <span asp-validation-for="DriverPhone" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Dashboard" class="btn btn-secondary">Back</a>
+</form>
