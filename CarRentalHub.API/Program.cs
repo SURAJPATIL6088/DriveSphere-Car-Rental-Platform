@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using CarRentalHub.API.Data;
 using CarRentalHub.API.Models;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
