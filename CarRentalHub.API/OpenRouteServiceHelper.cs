@@ -4,7 +4,7 @@ using System.Text.Json;
 
 public static class OpenRouteServiceHelper
 {
-    private static readonly string ApiKey = "5b3ce3597851110001cf6248b7912f6e26964394bd0fb71453a17be6";
+    private static readonly string ApiKey = "enter-your-api-key";
     private static readonly HttpClient client = new HttpClient();
 
     public static async Task<double> GetDistanceInKmAsync(string from, string to)
